@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>devanshi4LR — Devanshi Ramanuj | 1st Year MBBS</title>
+
+  <!-- Google Fonts: Syne (Display), Space Grotesk (UI), Inter (Body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Custom Tailwind Design Tokens -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            royal: '#0B46B5',
+            royalMid: '#0F52BA',
+            midnight: '#071330',
+            ice: '#F0F6FF',
+            iceDeep: '#DCEBFF',
+            limePop: '#C8FF2E',
+            cyanPop: '#38BDF8',
+          },
+          fontFamily: {
+            display: ['Syne', 'sans-serif'],
+            grotesk: ['"Space Grotesk"', 'sans-serif'],
+            sans: ['Inter', 'sans-serif'],
+          },
+          boxShadow: {
+            'bento': '0 10px 30px -10px rgba(7, 19, 48, 0.14)',
+            'glow-cyan': '0 0 40px -8px rgba(56, 189, 248, 0.45)',
+            'glow-lime': '0 0 32px -6px rgba(200, 255, 46, 0.45)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Royal Blue Hero Surface with Subtle Mesh Glow */
+    .hero-surface {
+      background-color: #0B46B5;
+      background-image:
+        radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.24), transparent 42%),
+        radial-gradient(circle at 85% 80%, rgba(7, 19, 48, 0.55), transparent 50%),
+        linear-gradient(135deg, #0B46B5 0%, #0F52BA 52%, #071330 100%);
+    }
+
+    /* Subtle Holographic Sheen for Voter Pass */
+    .holo-sheen {
+      background: linear-gradient(
+        120deg,
+        rgba(255, 255, 255, 0.04) 0%,
+        rgba(56, 189, 248, 0.12) 38%,
+        rgba(200, 255, 46, 0.12) 55%,
+        rgba(255, 255, 255, 0.03) 100%
+      );
+    }
+
+    /* Decorative CSS Barcode */
+    .pass-barcode {
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(240, 246, 255, 0.85) 0px,
+        rgba(240, 246, 255, 0.85) 2px,
+        transparent 2px,
+        transparent 4px,
+        rgba(240, 246, 255, 0.85) 4px,
+        rgba(240, 246, 255, 0.85) 5px,
+        transparent 5px,
+        transparent 8px,
+        rgba(240, 246, 255, 0.85) 8px,
+        rgba(240, 246, 255, 0.85) 11px,
+        transparent 11px,
+        transparent 13px
+      );
+    }
+
+    /* Floating Particle Burst */
+    .burst-particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      user-select: none;
+      will-change: transform, opacity;
+    }
+
+    /* Subtle Certify Pop Animation */
+    @keyframes passCertifyPop {
+      0% { transform: scale(0.97); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+    .animate-certify {
+      animation: passCertifyPop 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Subtle Shake & Pulse for Already-Supported Clicks */
+    @keyframes gentleShake {
+      0%, 100% { transform: translateX(0) scale(1); }
+      20% { transform: translateX(-4px) scale(1.02); }
+      45% { transform: translateX(4px) scale(1.02); }
+      70% { transform: translateX(-2px) scale(1.01); }
+    }
+    .animate-gentle-shake {
+      animation: gentleShake 0.38s ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-ice text-midnight font-sans antialiased overflow-x-hidden selection:bg-limePop selection:text-midnight">
+
+  <!-- ==================== TOAST NOTIFICATION STACK ==================== -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-[90vw] sm:max-w-xs pointer-events-none"></div>
+
+  <!-- ==================== 1. STICKY MINIMAL NAVBAR ==================== -->
+  <header class="sticky top-0 z-40 bg-midnight/90 backdrop-blur-md border-b border-white/10 text-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <!-- Brand -->
+      <a href="#hero" class="flex items-center gap-2 group">
+        <span class="font-display font-extrabold text-lg sm:text-xl tracking-tight text-white">
+          devanshi<span class="text-limePop">4LR</span>
+        </span>
+        <span class="text-lg transition-transform duration-200 group-hover:-rotate-12">🐐</span>
+      </a>
+
+      <!-- Quick Nav Links -->
+      <nav class="hidden sm:flex items-center gap-1 font-grotesk font-semibold text-sm text-ice/80">
+        <a href="#manifesto" class="px-3.5 py-2 rounded-xl hover:bg-white/10 hover:text-white transition-colors">Manifesto</a>
+        <a href="#voter-pass" class="px-3.5 py-2 rounded-xl hover:bg-white/10 hover:text-white transition-colors">Voter Pass</a>
+      </nav>
+
+      <!-- Mini Live Support Pill -->
+      <div class="flex items-center gap-2">
+        <button
+          id="nav-support-btn"
+          onclick="handleSupportClick(event)"
+          aria-pressed="false"
+          class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 active:scale-95 transition-all border border-cyanPop/40 rounded-full px-3.5 py-1.5 font-grotesk text-xs sm:text-sm font-semibold text-white cursor-pointer"
+          title="Click to support Devanshi"
+        >
+          <span id="nav-support-dot" class="w-2 h-2 rounded-full bg-limePop animate-pulse"></span>
+          <span id="nav-support-label" class="hidden xs:inline text-ice/85">Supporters</span>
+          <span id="nav-support-count" class="bg-limePop text-midnight font-bold px-2 py-0.5 rounded-full text-xs">127</span>
+        </button>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" aria-label="Toggle Menu" class="sm:hidden p-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Quick Links Dropdown -->
+    <div id="mobile-menu" class="hidden sm:hidden bg-midnight border-t border-white/10 px-4 py-2.5 space-y-1 font-grotesk font-semibold text-sm">
+      <a href="#manifesto" class="mobile-nav-link block px-3 py-2 rounded-xl text-ice/85 hover:bg-white/10 hover:text-white">Manifesto</a>
+      <a href="#voter-pass" class="mobile-nav-link block px-3 py-2 rounded-xl text-ice/85 hover:bg-white/10 hover:text-white">Voter Pass</a>
+    </div>
+  </header>
+
+  <!-- ==================== 2. HERO SECTION (2-COLUMN BENTO) ==================== -->
+  <section id="hero" class="hero-surface relative text-white overflow-hidden border-b border-white/10">
+    <!-- Subtle Low-Opacity Repeating Goat Pattern -->
+    <div id="hero-goat-pattern" aria-hidden="true" class="pointer-events-none select-none absolute inset-0 overflow-hidden opacity-[0.06] grid grid-cols-6 sm:grid-cols-10 gap-8 p-6 text-3xl sm:text-4xl place-items-center"></div>
+
+    <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-20">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+
+        <!-- Left Bento Column -->
+        <div class="lg:col-span-7 space-y-6">
+          <!-- Pill Badge -->
+          <div class="inline-flex items-center gap-2 bg-midnight/75 backdrop-blur-md border border-cyanPop/40 px-4 py-1.5 rounded-full font-grotesk font-bold text-[11px] sm:text-xs tracking-widest text-cyanPop uppercase">
+            <span class="w-2 h-2 rounded-full bg-limePop"></span>
+            <span>1ST YEAR MBBS • LADIES REPRESENTATIVE</span>
+          </div>
+
+          <!-- Giant Bold Headline & Subtitle -->
+          <div class="space-y-3">
+            <h1 class="font-display font-extrabold text-5xl sm:text-7xl lg:text-[5rem] leading-[0.92] tracking-tight text-white">
+              devanshi<span class="text-limePop">4LR</span>
+            </h1>
+            <p class="font-grotesk text-base sm:text-xl text-ice/90 max-w-xl leading-relaxed font-medium">
+              <strong class="text-white font-bold">Devanshi Ramanuj — The Goated LR.</strong>
+              Proven leader. Here to change, not just participate.
+            </p>
+          </div>
+
+          <!-- Interactive Primary CTA + Live Counter Bento Strip -->
+          <div class="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+            <button
+              id="hero-support-btn"
+              onclick="handleSupportClick(event)"
+              aria-pressed="false"
+              class="group relative inline-flex items-center justify-center gap-2.5 bg-limePop hover:bg-[#d4ff54] active:scale-[0.98] text-midnight font-display font-extrabold text-base sm:text-lg px-7 py-4 rounded-2xl shadow-glow-lime transition-all cursor-pointer"
+            >
+              <span id="hero-support-badge" class="hidden items-center justify-center w-6 h-6 rounded-full bg-midnight text-limePop text-xs font-bold">✓</span>
+              <span id="hero-support-text">SUPPORT DEVANSHI</span>
+              <span class="text-xl transition-transform duration-200 group-hover:scale-125 group-hover:-rotate-12">🐐</span>
+            </button>
+
+            <div class="bg-midnight/65 backdrop-blur-md border border-white/15 rounded-2xl px-5 py-3.5 flex items-center justify-center sm:justify-start gap-3">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-limePop animate-pulse"></span>
+                <span class="font-grotesk text-xs sm:text-sm text-ice/75 font-medium">Backing Devanshi</span>
+              </div>
+              <span id="hero-support-count" class="font-display font-extrabold text-2xl text-limePop leading-none">127</span>
+            </div>
+          </div>
+
+          <!-- Compact Glass Highlight Pills -->
+          <div class="pt-1 flex flex-wrap gap-2.5 font-grotesk text-xs font-semibold">
+            <span class="bg-white/10 backdrop-blur-md border border-white/15 text-ice px-3.5 py-1.5 rounded-xl">
+              🩺 1st Year MBBS Built
+            </span>
+            <span class="bg-white/10 backdrop-blur-md border border-white/15 text-ice px-3.5 py-1.5 rounded-xl">
+              ⚡ Proven Leader
+            </span>
+            <span class="bg-white/10 backdrop-blur-md border border-white/15 text-ice px-3.5 py-1.5 rounded-xl">
+              🧪 Stronger Than DH Formalin
+            </span>
+          </div>
+        </div>
+
+        <!-- Right Bento Column: Framed Official Campaign Poster -->
+        <div class="lg:col-span-5 flex justify-center lg:justify-end">
+          <div class="w-full max-w-[360px] p-2.5 rounded-[28px] bg-gradient-to-br from-cyanPop/40 via-white/15 to-royal/50 shadow-glow-cyan backdrop-blur-md border border-cyanPop/35">
+            <div class="relative rounded-[20px] overflow-hidden bg-midnight border border-white/15">
+              <!-- Official Poster Image -->
+              <img
+                id="campaign-poster-img"
+                src="vote For ved - 2.png"
+                alt="Official devanshi4LR Campaign Poster — Devanshi Ramanuj"
+                class="w-full h-auto block object-cover"
+                onerror="showPosterFallback()"
+              />
+
+              <!-- Stylish Fallback Card (Shown Automatically if Local Poster Isn't Found) -->
+              <div id="poster-fallback" class="hidden aspect-[4/5] w-full p-6 flex-col justify-between bg-gradient-to-br from-royal via-royalMid to-midnight text-white">
+                <div class="flex items-center justify-between">
+                  <span class="font-grotesk text-[11px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full bg-white/10 border border-cyanPop/40 text-cyanPop">
+                    OFFICIAL POSTER
+                  </span>
+                  <span class="text-2xl">🐐</span>
+                </div>
+
+                <div class="space-y-3 text-center my-auto py-6">
+                  <p class="font-grotesk text-xs font-bold tracking-[0.2em] text-limePop uppercase">THE GOATED LR</p>
+                  <h2 class="font-display font-extrabold text-3xl sm:text-4xl leading-tight tracking-tight">
+                    DEVANSHI<br/>RAMANUJ
+                  </h2>
+                  <div class="w-12 h-1 bg-limePop mx-auto rounded-full"></div>
+                  <p class="font-grotesk text-xs text-ice/85 pt-1">
+                    • proven leader<br/>
+                    • here to change, not participate
+                  </p>
+                </div>
+
+                <div class="pt-3 border-t border-white/15 flex items-center justify-between text-xs font-grotesk text-ice/75">
+                  <span>1st Year MBBS</span>
+                  <span class="text-limePop font-bold">#devanshi4LR</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Frame Footer Caption -->
+            <div class="mt-2.5 px-2 flex items-center justify-between font-grotesk text-xs font-semibold">
+              <span class="text-ice/80">Official Campaign Poster</span>
+              <span class="text-limePop">#devanshi4LR 🐐</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 3. THE MANIFESTO (4 COMPACT BENTO CARDS) ==================== -->
+  <section id="manifesto" class="py-16 sm:py-20 px-4 sm:px-6 bg-ice">
+    <div class="max-w-6xl mx-auto">
+      <!-- Section Header + Segmented Toggle -->
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-10">
+        <div class="space-y-2">
+          <span class="inline-flex items-center gap-1.5 bg-iceDeep text-royal font-grotesk font-bold text-xs uppercase tracking-widest px-3 py-1 rounded-full border border-royal/20">
+            01 • Agenda
+          </span>
+          <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-midnight tracking-tight">
+            The Manifesto
+          </h2>
+          <p class="text-slate-600 text-sm sm:text-base max-w-md">
+            Four clear priorities for 1st Year MBBS—toggle between the formal plan and the unfiltered version.
+          </p>
+        </div>
+
+        <!-- Clean Segmented Toggle Switch -->
+        <div class="inline-flex items-center bg-midnight p-1.5 rounded-2xl border border-midnight/10 shadow-bento self-start sm:self-auto" role="tablist" aria-label="Manifesto Tone Toggle">
+          <button
+            id="btn-serious"
+            onclick="setManifestoMode('serious')"
+            role="tab"
+            aria-selected="true"
+            class="px-4 py-2 rounded-xl font-grotesk font-bold text-xs sm:text-sm transition-all bg-white text-midnight shadow-sm cursor-pointer"
+          >
+            Serious Mode 🩺
+          </button>
+          <button
+            id="btn-realtalk"
+            onclick="setManifestoMode('realtalk')"
+            role="tab"
+            aria-selected="false"
+            class="px-4 py-2 rounded-xl font-grotesk font-bold text-xs sm:text-sm transition-all text-ice/75 hover:text-limePop cursor-pointer"
+          >
+            Real Talk 🐐
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 Compact Bento Cards (2x2 Grid) -->
+      <div id="manifesto-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- Populated by JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 4. CERTIFIED GOAT VOTER PASS ==================== -->
+  <section id="voter-pass" class="py-16 sm:py-20 px-4 sm:px-6 bg-iceDeep/60 border-t border-royal/10">
+    <div class="max-w-5xl mx-auto">
+      <!-- Dark Midnight Navy Bento Wrapper -->
+      <div class="bg-midnight text-white rounded-[32px] p-6 sm:p-10 lg:p-12 border border-cyanPop/25 shadow-bento relative overflow-hidden">
+        <!-- Ambient Corner Glows -->
+        <div aria-hidden="true" class="pointer-events-none absolute -top-24 -right-24 w-72 h-72 rounded-full bg-royal/40 blur-3xl"></div>
+        <div aria-hidden="true" class="pointer-events-none absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-cyanPop/15 blur-3xl"></div>
+
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+
+          <!-- Left Column: Input & Certify Action -->
+          <div class="lg:col-span-5 space-y-5">
+            <span class="inline-flex items-center gap-1.5 bg-limePop/15 text-limePop border border-limePop/35 font-grotesk font-bold text-xs uppercase tracking-widest px-3 py-1 rounded-full">
+              02 • Digital Pass
+            </span>
+
+            <div class="space-y-2">
+              <h2 class="font-display font-extrabold text-3xl sm:text-4xl leading-tight tracking-tight">
+                Certified GOAT Voter Pass
+              </h2>
+              <p class="text-ice/75 text-sm sm:text-base leading-relaxed">
+                Drop your name to generate your screenshot-ready voter pass and rep <span class="text-limePop font-semibold">#devanshi4LR</span>.
+              </p>
+            </div>
+
+            <form id="voter-pass-form" class="space-y-3 pt-1">
+              <div>
+                <label for="voter-name-input" class="block font-grotesk text-xs font-semibold uppercase tracking-wider text-cyanPop mb-1.5">
+                  Voter's Name
+                </label>
+                <input
+                  id="voter-name-input"
+                  type="text"
+                  maxlength="26"
+                  placeholder="Enter your name..."
+                  class="w-full px-4 py-3.5 rounded-2xl bg-white/10 border border-white/20 text-white placeholder:text-ice/45 font-grotesk font-semibold text-sm sm:text-base focus:outline-none focus:border-limePop focus:ring-2 focus:ring-limePop/30 transition-all"
+                />
+              </div>
+
+              <button
+                type="submit"
+                class="w-full bg-limePop hover:bg-[#d4ff54] active:scale-[0.98] text-midnight font-display font-extrabold text-sm sm:text-base px-6 py-3.5 rounded-2xl shadow-glow-lime transition-all cursor-pointer"
+              >
+                Certify My Voter Pass 🐐
+              </button>
+            </form>
+          </div>
+
+          <!-- Right Column: Screenshot-Ready Digital ID Card + Copy Button -->
+          <div class="lg:col-span-7 flex flex-col items-center lg:items-end gap-4">
+            <!-- Digital ID Card -->
+            <div id="voter-id-card" class="w-full max-w-md rounded-[26px] p-[1.5px] bg-gradient-to-br from-cyanPop via-royalMid to-limePop shadow-glow-cyan">
+              <div class="rounded-[24.5px] bg-[#09193D] holo-sheen p-5 sm:p-6 space-y-5 relative overflow-hidden">
+
+                <!-- Card Top Header -->
+                <div class="flex items-center justify-between gap-2 pb-4 border-b border-white/10">
+                  <div>
+                    <p class="font-grotesk font-bold text-[10px] sm:text-[11px] uppercase tracking-[0.16em] text-cyanPop">
+                      OFFICIAL VOTER PASS • devanshi4LR
+                    </p>
+                    <p id="pass-id-display" class="font-grotesk font-bold text-xs text-ice/70 mt-1">
+                      #GOAT-2026-4821
+                    </p>
+                  </div>
+                  <span class="inline-flex items-center gap-1 bg-limePop/15 border border-limePop/50 text-limePop font-grotesk font-bold text-[11px] px-2.5 py-1 rounded-full shrink-0">
+                    <span>✓</span>
+                    <span>VERIFIED</span>
+                  </span>
+                </div>
+
+                <!-- Card Main Holder Info -->
+                <div class="flex items-center justify-between gap-4">
+                  <div class="min-w-0">
+                    <p class="font-grotesk text-[10px] font-semibold uppercase tracking-widest text-ice/55">
+                      PASS HOLDER
+                    </p>
+                    <p id="pass-voter-name" class="font-display font-extrabold text-2xl sm:text-3xl text-white truncate mt-0.5">
+                      YOUR NAME
+                    </p>
+                    <p class="font-grotesk text-xs text-cyanPop font-medium mt-1">
+                      1st Year MBBS • Ladies Representative Election
+                    </p>
+                  </div>
+                  <div class="w-14 h-14 shrink-0 rounded-2xl bg-gradient-to-br from-royal to-midnight border border-cyanPop/40 flex items-center justify-center text-3xl shadow-inner">
+                    🐐
+                  </div>
+                </div>
+
+                <!-- Tagline & Barcode Footer -->
+                <div class="pt-4 border-t border-dashed border-white/15 flex items-end justify-between gap-4">
+                  <div>
+                    <p class="font-grotesk text-[10px] uppercase tracking-widest text-ice/50">STATUS</p>
+                    <p class="font-grotesk font-bold text-xs sm:text-sm text-limePop mt-0.5">
+                      Survived DH. Voted Right.
+                    </p>
+                  </div>
+                  <!-- Subtle Barcode Accent -->
+                  <div class="flex flex-col items-end gap-1">
+                    <div class="pass-barcode w-24 h-7 rounded-sm opacity-80"></div>
+                    <span class="font-grotesk text-[9px] tracking-[0.22em] text-ice/50 uppercase">MBBS-GOAT</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Copy Hype Message Button Below Card -->
+            <button
+              id="copy-hype-btn"
+              onclick="copyHypeMessage()"
+              class="w-full max-w-md inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/15 active:scale-[0.99] border border-white/20 text-white font-grotesk font-bold text-sm px-5 py-3 rounded-2xl transition-all cursor-pointer"
+            >
+              <span id="copy-hype-icon">📋</span>
+              <span id="copy-hype-label">Copy Hype Message</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== MINIMAL 1-LINE FOOTER ==================== -->
+  <footer class="bg-midnight text-ice/75 border-t border-white/10 py-5 px-4 text-center">
+    <p class="font-grotesk font-semibold text-xs sm:text-sm tracking-wide">
+      devanshi<span class="text-limePop font-bold">4LR</span> • 1st Year MBBS LR Campaign 🐐
+    </p>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    /* ------------------------------------------------------------
+       1. HERO SUBTLE REPEATING GOAT PATTERN
+       ------------------------------------------------------------ */
+    function renderHeroGoatPattern() {
+      const container = document.getElementById('hero-goat-pattern');
+      if (!container) return;
+      container.innerHTML = '<span>🐐</span>'.repeat(40);
+    }
+
+    /* ------------------------------------------------------------
+       2. POSTER FALLBACK HANDLER
+       ------------------------------------------------------------ */
+    function showPosterFallback() {
+      const img = document.getElementById('campaign-poster-img');
+      const fallback = document.getElementById('poster-fallback');
+      if (img) img.classList.add('hidden');
+      if (fallback) {
+        fallback.classList.remove('hidden');
+        fallback.classList.add('flex');
+      }
+    }
+
+    /* ------------------------------------------------------------
+       3. LIVE SUPPORT COUNTER (1 PER USER via localStorage) + PARTICLES + TOASTS
+       ------------------------------------------------------------ */
+    const STORAGE_KEY_COUNT = 'devanshi4lr_count';
+    const STORAGE_KEY_SUPPORTED = 'devanshi4lr_has_supported';
+    const BASE_COUNT = 127;
+
+    let hasSupported = false;
+    let supportCount = BASE_COUNT;
+
+    try {
+      hasSupported = localStorage.getItem(STORAGE_KEY_SUPPORTED) === 'true';
+      const savedCount = parseInt(localStorage.getItem(STORAGE_KEY_COUNT), 10);
+      if (!isNaN(savedCount) && savedCount >= BASE_COUNT) {
+        supportCount = savedCount;
+      } else if (hasSupported) {
+        supportCount = BASE_COUNT + 1;
+      }
+    } catch (err) {
+      // Fallback safely if localStorage is unavailable
+    }
+
+    function syncSupportCounters() {
+      const navEl = document.getElementById('nav-support-count');
+      const heroEl = document.getElementById('hero-support-count');
+      if (navEl) navEl.textContent = supportCount;
+      if (heroEl) heroEl.textContent = supportCount;
+    }
+
+    function applySupportedUI() {
+      const heroBtn = document.getElementById('hero-support-btn');
+      const heroText = document.getElementById('hero-support-text');
+      const heroBadge = document.getElementById('hero-support-badge');
+      const navBtn = document.getElementById('nav-support-btn');
+      const navLabel = document.getElementById('nav-support-label');
+
+      if (heroBtn) {
+        heroBtn.setAttribute('aria-pressed', 'true');
+        heroBtn.classList.remove('hover:bg-[#d4ff54]');
+        heroBtn.classList.add('ring-2', 'ring-white/85', 'ring-offset-2', 'ring-offset-royal', 'bg-limePop');
+      }
+      if (heroText) {
+        heroText.textContent = 'SUPPORTED ✓';
+      }
+      if (heroBadge) {
+        heroBadge.classList.remove('hidden');
+        heroBadge.classList.add('inline-flex');
+      }
+      if (navBtn) {
+        navBtn.setAttribute('aria-pressed', 'true');
+        navBtn.classList.remove('border-cyanPop/40');
+        navBtn.classList.add('border-limePop/70', 'bg-limePop/15');
+        navBtn.title = 'Your support is already counted!';
+      }
+      if (navLabel) {
+        navLabel.textContent = 'Supported ✓';
+        navLabel.classList.remove('text-ice/85');
+        navLabel.classList.add('text-limePop');
+      }
+    }
+
+    function triggerShakeAnimation(element) {
+      if (!element) return;
+      element.classList.remove('animate-gentle-shake');
+      void element.offsetWidth;
+      element.classList.add('animate-gentle-shake');
+    }
+
+    function handleSupportClick(event) {
+      // Prevent multiple increments from the same user
+      if (hasSupported) {
+        const clickedBtn = event && event.currentTarget ? event.currentTarget : document.getElementById('hero-support-btn');
+        triggerShakeAnimation(clickedBtn);
+        showToast('Your support is already counted! One vote per GOAT 🐐');
+        return;
+      }
+
+      hasSupported = true;
+      supportCount += 1;
+
+      try {
+        localStorage.setItem(STORAGE_KEY_SUPPORTED, 'true');
+        localStorage.setItem(STORAGE_KEY_COUNT, String(supportCount));
+      } catch (err) {
+        // Ignore storage errors in restricted environments
+      }
+
+      syncSupportCounters();
+      applySupportedUI();
+
+      const originX = (event && event.clientX) ? event.clientX : window.innerWidth / 2;
+      const originY = (event && event.clientY) ? event.clientY : window.innerHeight / 2;
+      launchParticleBurst(originX, originY);
+
+      showToast('Support locked in! Certified GOAT energy 🐐');
+    }
+
+    function launchParticleBurst(x, y) {
+      const emojis = ['🐐', '🩺', '💙', '⚡', '✨'];
+      const particleCount = 20;
+
+      for (let i = 0; i < particleCount; i++) {
+        const node = document.createElement('div');
+        node.className = 'burst-particle';
+        node.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        node.style.left = `${x}px`;
+        node.style.top = `${y}px`;
+        node.style.fontSize = `${16 + Math.random() * 12}px`;
+        document.body.appendChild(node);
+
+        const angle = (Math.PI * 2 * i) / particleCount + (Math.random() * 0.35 - 0.175);
+        const distance = 60 + Math.random() * 115;
+        const dx = Math.cos(angle) * distance;
+        const dy = Math.sin(angle) * distance - 40;
+        const rotate = (Math.random() - 0.5) * 260;
+
+        node.animate(
+          [
+            { transform: 'translate(-50%, -50%) scale(0.5) rotate(0deg)', opacity: 1 },
+            { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(1.15) rotate(${rotate}deg)`, opacity: 0 }
+          ],
+          {
+            duration: 780 + Math.random() * 260,
+            easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+            fill: 'forwards'
+          }
+        );
+
+        setTimeout(() => node.remove(), 1100);
+      }
+    }
+
+    function showToast(message) {
+      const stack = document.getElementById('toast-container');
+      if (!stack) return;
+
+      const toast = document.createElement('div');
+      toast.className = 'pointer-events-auto bg-midnight/95 backdrop-blur-md text-white border border-limePop/60 shadow-bento font-grotesk font-semibold text-xs sm:text-sm px-4 py-3 rounded-2xl flex items-center gap-2 transition-all duration-300 translate-y-2 opacity-0';
+      toast.innerHTML = `<span class="w-2 h-2 rounded-full bg-limePop shrink-0"></span><span>${message}</span>`;
+      stack.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      while (stack.children.length > 3) {
+        stack.removeChild(stack.firstChild);
+      }
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-2', 'opacity-0');
+        setTimeout(() => toast.remove(), 280);
+      }, 2500);
+    }
+
+    /* ------------------------------------------------------------
+       4. THE MANIFESTO (SERIOUS MODE vs REAL TALK TOGGLE)
+       ------------------------------------------------------------ */
+    const MANIFESTO_CARDS = [
+      {
+        num: '01',
+        icon: '🦴',
+        title: 'DH & Practicals Survival',
+        serious: 'Organized bone-set and histology slide sharing, clear dissection checklists, and structured viva tips before assessments.',
+        realtalk: "Formalin already makes us cry, disorganization shouldn't."
+      },
+      {
+        num: '02',
+        icon: '📚',
+        title: 'Notes & Academic Hub',
+        serious: 'A centralized, well-sorted batch repository for lecture notes, markings, and exam prep resources accessible to everyone.',
+        realtalk: 'No more digging through 400 forwarded PDFs at 2 AM.'
+      },
+      {
+        num: '03',
+        icon: '✨',
+        title: 'Zero-Drama Events & Representation',
+        serious: "Strong, clear advocacy for the girls' batch alongside smooth, inclusive coordination for college fests and cultural events.",
+        realtalk: 'Main character energy for the whole batch, zero gatekeeping.'
+      },
+      {
+        num: '04',
+        icon: '💬',
+        title: 'Always Approachable',
+        serious: 'Actually listens, responds promptly, and follows through on every batch concern—from day one to final exams.',
+        realtalk: 'No ghosting after elections. Verified GOAT behavior.'
+      }
+    ];
+
+    let currentManifestoMode = 'serious';
+
+    function renderManifestoCards() {
+      const grid = document.getElementById('manifesto-grid');
+      if (!grid) return;
+
+      const isRealTalk = currentManifestoMode === 'realtalk';
+
+      grid.innerHTML = MANIFESTO_CARDS.map(card => `
+        <article class="group bg-white rounded-3xl p-6 sm:p-7 border ${isRealTalk ? 'border-royal/30' : 'border-royal/15'} shadow-bento hover:-translate-y-1 hover:border-royal/45 transition-all duration-200 flex flex-col justify-between gap-4">
+          <div class="flex items-center justify-between gap-3">
+            <div class="w-11 h-11 rounded-2xl ${isRealTalk ? 'bg-midnight text-limePop' : 'bg-iceDeep text-royal'} flex items-center justify-center text-xl border border-royal/15 transition-colors">
+              ${card.icon}
+            </div>
+            <span class="font-grotesk font-bold text-[11px] uppercase tracking-wider px-3 py-1 rounded-full ${isRealTalk ? 'bg-limePop text-midnight' : 'bg-ice text-royal border border-royal/15'}">
+              ${isRealTalk ? '🐐 Real Talk' : 'Point ' + card.num}
+            </span>
+          </div>
+
+          <div class="space-y-2">
+            <h3 class="font-display font-extrabold text-xl text-midnight tracking-tight">
+              ${card.title}
+            </h3>
+            <p class="text-slate-600 text-sm sm:text-[15px] leading-relaxed font-medium">
+              ${isRealTalk ? card.realtalk : card.serious}
+            </p>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function setManifestoMode(mode) {
+      currentManifestoMode = mode;
+      const btnSerious = document.getElementById('btn-serious');
+      const btnRealTalk = document.getElementById('btn-realtalk');
+
+      if (mode === 'serious') {
+        btnSerious.className = 'px-4 py-2 rounded-xl font-grotesk font-bold text-xs sm:text-sm transition-all bg-white text-midnight shadow-sm cursor-pointer';
+        btnSerious.setAttribute('aria-selected', 'true');
+        btnRealTalk.className = 'px-4 py-2 rounded-xl font-grotesk font-bold text-xs sm:text-sm transition-all text-ice/75 hover:text-limePop cursor-pointer';
+        btnRealTalk.setAttribute('aria-selected', 'false');
+      } else {
+        btnRealTalk.className = 'px-4 py-2 rounded-xl font-grotesk font-bold text-xs sm:text-sm transition-all bg-limePop text-midnight shadow-sm cursor-pointer';
+        btnRealTalk.setAttribute('aria-selected', 'true');
+        btnSerious.className = 'px-4 py-2 rounded-xl font-grotesk font-bold text-xs sm:text-sm transition-all text-ice/75 hover:text-white cursor-pointer';
+        btnSerious.setAttribute('aria-selected', 'false');
+      }
+
+      renderManifestoCards();
+    }
+
+    /* ------------------------------------------------------------
+       5. CERTIFIED GOAT VOTER PASS & COPY HYPE MESSAGE
+       ------------------------------------------------------------ */
+    function generatePassId() {
+      const num = Math.floor(1000 + Math.random() * 9000);
+      return `#GOAT-2026-${num}`;
+    }
+
+    const voterNameInput = document.getElementById('voter-name-input');
+    const passVoterName = document.getElementById('pass-voter-name');
+    const passIdDisplay = document.getElementById('pass-id-display');
+    const voterIdCard = document.getElementById('voter-id-card');
+
+    // Live preview as user types
+    voterNameInput.addEventListener('input', () => {
+      const val = voterNameInput.value.trim();
+      passVoterName.textContent = val ? val.toUpperCase() : 'YOUR NAME';
+    });
+
+    // Certify button submission
+    document.getElementById('voter-pass-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      const val = voterNameInput.value.trim();
+      passVoterName.textContent = val ? val.toUpperCase() : 'CERTIFIED SUPPORTER';
+      passIdDisplay.textContent = generatePassId();
+
+      // Replay subtle pop animation
+      voterIdCard.classList.remove('animate-certify');
+      void voterIdCard.offsetWidth;
+      voterIdCard.classList.add('animate-certify');
+
+      const rect = voterIdCard.getBoundingClientRect();
+      launchParticleBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      showToast('Voter Pass certified! Screenshot & flex it 🐐');
+    });
+
+    let copyResetTimer = null;
+
+    function copyHypeMessage() {
+      const hypeText = 'Just got my Certified GOAT Voter Pass 🐐 Backing Devanshi Ramanuj for LR — #devanshi4LR';
+      const textarea = document.createElement('textarea');
+      textarea.value = hypeText;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+
+      let copied = false;
+      try {
+        copied = document.execCommand('copy');
+      } catch (err) {
+        copied = false;
+      }
+      document.body.removeChild(textarea);
+
+      const labelEl = document.getElementById('copy-hype-label');
+      const iconEl = document.getElementById('copy-hype-icon');
+      const btnEl = document.getElementById('copy-hype-btn');
+
+      if (copied) {
+        iconEl.textContent = '✓';
+        labelEl.textContent = 'Copied!';
+        btnEl.classList.add('border-limePop', 'text-limePop');
+        showToast('Hype message copied to clipboard!');
+
+        clearTimeout(copyResetTimer);
+        copyResetTimer = setTimeout(() => {
+          iconEl.textContent = '📋';
+          labelEl.textContent = 'Copy Hype Message';
+          btnEl.classList.remove('border-limePop', 'text-limePop');
+        }, 2200);
+      } else {
+        showToast('Could not copy automatically — please copy manually.');
+      }
+    }
+
+    /* ------------------------------------------------------------
+       6. MOBILE MENU & INITIALIZATION
+       ------------------------------------------------------------ */
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderHeroGoatPattern();
+      syncSupportCounters();
+      if (hasSupported) {
+        applySupportedUI();
+      }
+      renderManifestoCards();
+    });
+  </script>
+</body>
+</html>
